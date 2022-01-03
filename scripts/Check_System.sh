@@ -9,6 +9,8 @@ LOG_FILE="/var/log/swcpu_setup_bundle_install.log"
 DATE_TIME="$(date +"%F %H:%M:%S")"
 
 IP_A="..."
+ALL_NETWORK_INTERFACES="..."
+VNIC_INTERFACE="..."
 
 
 check_modules(){
@@ -17,7 +19,6 @@ check_modules(){
 
     OUTPUT=$(ls /lib/modules)
     echo "${OUTPUT}"
-
     command lsmod | grep s7vmm_dev
     
     
@@ -30,16 +31,26 @@ check_modules(){
     echo "${SWCPU_MAC}"
 
     #Get all ip interfaces
+    echo "**************************"
     IP_A=$(ip a)
     echo "${IP_A}"
+    
+    echo "**************************"
+    ALL_NETWORK_INTERFACES=$(ip -o link show | awk -F': ' '{print $2}')
+    echo "${ALL_NETWORK_INTERFACES}"
+
 
 
 }
 
 check_enp0s_exist(){
     SUB='enp0s'
-    if [[ "$IP_A" == *"$SUB"* ]]; then
+    if [[ "$ALL_NETWORK_INTERFACES" == *"$SUB"* ]]; then
        echo "It's there."
+       echo "**************************"
+       VNIC_INTERFACE=$(cut -d "$SUB" -f2 <<< "$ALL_NETWORK_INTERFACES")
+       echo "${VNIC_INTERFACE}"
+
     fi
 }
 
