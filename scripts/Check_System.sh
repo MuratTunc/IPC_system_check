@@ -12,6 +12,7 @@ NOCOLOR="\033[0m"
 LOG_FILE="/var/log/swcpu_setup_bundle_install.log"
 DATE_TIME="$(date +"%F %H:%M:%S")"
 ADONIS_IP="192.168.73.1"
+NETWORK_MASK="255.255.255.0"
 UP_STATE_NETWORK_INTERFACES="..."
 DOWN_STATE_NETWORK_INTERFACES="..."
 VNIC_NETWORK_STATE="..."
@@ -54,12 +55,15 @@ check_enp0s_exist(){
 }
 
 ping_to_ADONIS(){
-    
+    echo "-------------------------------------------"
     ping -c 1 "$ADONIS_IP" > /dev/null
     if [ $? -eq 0 ]; then
        echo "node $ADONIS_IP is up" 
     else
        echo -e "${RED}Ping to ADONIS IP $ADONIS_IP is failed...${NOCOLOR}"
+       echo "Setting ADONIS IP..."
+       OUTPUT=$(s7_vnic_ipconfig --nic ${VNIC_INTERFACE} --mac ${SWCPU_MAC} --setip ${ADONIS_IP} --setmask ${NETWORK_MASK})
+       echo "${OUTPUT}"
     fi
 
 }
