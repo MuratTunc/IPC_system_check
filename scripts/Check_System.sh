@@ -66,6 +66,8 @@ ping_to_ADONIS(){
        echo "${OUTPUT}"
     fi
 
+
+
 }
 print_IP_A(){
     echo "-------------------------------------------"
@@ -99,7 +101,7 @@ exit_program(){
     bash -c "exit 1"
 }
 
-
+#-------------------------------------------------#
 check_modules
 print_IP_A
 check_enp0s_exist
