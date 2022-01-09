@@ -24,10 +24,9 @@ VNIC_INTERFACE="..."
 
 check_modules(){
     
-    echo "Kernel module search is started..."
     echo "-------------------------------------------"
     OUTPUT=$(ls /lib/modules)
-    echo -e "Kernel version...${GREEN}${OUTPUT}${NOCOLOR}"
+    echo -e "Kernel version...${BLUE}${OUTPUT}${NOCOLOR}"
     command lsmod | grep s7vmm_dev
     
     
@@ -101,7 +100,20 @@ exit_program(){
     bash -c "exit 1"
 }
 
+check_failed_services(){
+    echo "-------------------------------------------"
+    OUTPUT=$(systemctl list-units | grep -i failed )
+    echo "${OUTPUT}"
+
+    if [ "$OUTPUT" == "" ];then
+        echo -e "${GREEN}No failed services...${NOCOLOR}"
+    fi
+
+
+}
+
 #-------------------------------------------------#
+check_failed_services
 check_modules
 print_IP_A
 check_enp0s_exist
